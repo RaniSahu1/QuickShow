@@ -43,7 +43,7 @@ Deployment: Vercel / Netlify / AWS
 📸 Screenshots
 
 ![Home ](home.png)
-![Movie ](movie.png)
+![Movie ](movies.png)
 
 🏗️ Status
 

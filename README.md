@@ -42,7 +42,8 @@ Deployment: Vercel / Netlify / AWS
 
 📸 Screenshots
 
-(Add your project screenshots here, e.g., Login Page, Movies Page, etc.)
+![Home ](home.png)
+![Movie ](movie.png)
 
 🏗️ Status
 

@@ -7,8 +7,8 @@ export const inngest = new Inngest({ id: "movie-ticket-booking" });
 // inngest function to save user data to db
 
 const  syncUserCreation  = inngest.createFunction(
-  { id: "Sync-User-from-clerk" },
-  { event: "clerk/user.created" },
+  { id: 'Sync-User-from-clerk' },
+  { event: 'clerk/user.created' },
   async ({ event }) => {
     // Import User model here to avoid circular dependency
     const {id , first_name, last_name, emai_addresses, image_url} = event.data;
@@ -26,8 +26,8 @@ const  syncUserCreation  = inngest.createFunction(
 // inngest function to delete user data to db
 
 const  syncUserDeletion  = inngest.createFunction(
-  { id: "delete-User-with-clerk" },
-  { event: "clerk/user.deleted" },
+  { id: 'delete-User-with-clerk' },
+  { event: 'clerk/user.deleted' },
   async ({ event }) => {
     
     const {id} = event.data;
@@ -38,8 +38,8 @@ const  syncUserDeletion  = inngest.createFunction(
 )
 // inngest function to update user data to db
 const  syncUserUpdation  = inngest.createFunction(
-  { id: "update-User-from-clerk" },
-  { event: "clerk/user.updated" },
+  { id: 'update-User-from-clerk' },
+  { event: 'clerk/user.updated' },
   async ({ event }) => {
     
     const {id , first_name, last_name, emai_addresses, image_url} = event.data;

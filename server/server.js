@@ -1,4 +1,6 @@
- import express from 'express';
+ import { User } from './models/User.js';   
+
+import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './configs/db.js';

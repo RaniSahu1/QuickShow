@@ -1,5 +1,8 @@
 import {User} from "../models/User.js"; 
+import connectDB from "../configs/db.js";
 import { Inngest } from "inngest";
+// connect to DB when Inngest loads
+// connectDB()
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "movie-ticket-booking" });
@@ -11,15 +14,16 @@ const  syncUserCreation  = inngest.createFunction(
   { event: 'clerk/user.created' },
   async ({ event }) => {
     // Import User model here to avoid circular dependency
-    const {id , first_name, last_name, emai_addresses, image_url} = event.data;
+    await connectDB()
+    const {id , firstName, lastName, emailAddresses, imageUrl} = event.data;
     const userData = {
       _id: id,
-      email : emai_addresses[0].email_address,
-      name: `${first_name} ${last_name}`,
-      image : image_url
+      email : emailAddresses[0].emailAddress,
+      name: `${firstName} ${lastName}`,
+      image : imageUrl
     }
     await User.create(userData);  
-
+ return { ok: true };
 }
 )
 
@@ -29,11 +33,11 @@ const  syncUserDeletion  = inngest.createFunction(
   { id: 'delete-User-with-clerk' },
   { event: 'clerk/user.deleted' },
   async ({ event }) => {
-    
+    await connectDB();
     const {id} = event.data;
     
     await User.findByIdAndDelete(id);  
-
+ return { ok: true };
 }
 )
 // inngest function to update user data to db
@@ -41,15 +45,15 @@ const  syncUserUpdation  = inngest.createFunction(
   { id: 'update-User-from-clerk' },
   { event: 'clerk/user.updated' },
   async ({ event }) => {
-    
-    const {id , first_name, last_name, emai_addresses, image_url} = event.data;
+    await connectDB();
+    const {id , firstName, lastName, emailAddresses, imageUrl} = event.data;
     const userData = {
-      email : emai_addresses[0].email_address,
-      name: `${first_name} ${last_name}`,
-      image : image_url
+      email : emailAddresses[0].emailAddress,
+      name: `${firstName} ${lastName}`,
+      image : imageUrl
     }
     await User.findByIdAndUpdate(id,userData);  
-
+ return { ok: true };
 }
 )
 

@@ -1,14 +1,16 @@
 
-// import { User } from '../server/models/User.js';   
+   
 
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './configs/db.js';
 import {clerkMiddleware} from "@clerk/express"; 
-// import { inngest } from './inngest/index.js';
+
 import { serve } from "inngest/express";
 import {inngest, functions} from './inngest/index.js';
+console.log("Registered Inngest functions:", functions.map(fn => fn.id));
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;

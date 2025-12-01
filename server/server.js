@@ -1,4 +1,5 @@
- import { User } from '../server/models/User.js';   
+
+// import { User } from '../server/models/User.js';   
 
 import express from 'express';
 import cors from 'cors';
@@ -12,10 +13,12 @@ import {inngest, functions} from './inngest/index.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// await connectDB();
+await connectDB();
+
 //Middlewares
-app.use(cors());
+
 app.use(express.json());
+app.use(cors());
 app.use(clerkMiddleware());
 
 // API Routes

@@ -6,14 +6,14 @@ import toast from "react-hot-toast";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
 
-export const AppContext = createContext(
-    
-);
+export const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const [shows, setShows] = useState([])
     const [favoriteMovies, setFavoriteMovies] = useState([])
+
+    const image_base_url = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 
     const {user} = useUser();
     const {getToken} =useAuth();
@@ -22,7 +22,11 @@ export const AppProvider = ({children}) => {
 
     const fetchIsAdmin = async () => {
         try {
+            const token = await getToken();
+    console.log("Clerk token:", token);
+
             const {data} = await axios.get('/api/admin/is-admin',{headers: {Authorization: `Bearer ${await getToken()}`}})
+
             setIsAdmin(data.isAdmin)
 
             if(!data.isAdmin && location.pathname.startsWith('/admin')){
@@ -37,7 +41,7 @@ export const AppProvider = ({children}) => {
 
     const fetchShows = async () => {
         try {
-            const {data} = await axios.get('/api/show/all')
+            const {data} = await axios.get('/api/shows/all')
             if(data.success){
                 setShows(data.shows)
             }else{
@@ -72,7 +76,7 @@ export const AppProvider = ({children}) => {
         }
     },[user])
     
-    const value = {axios, fetchIsAdmin, user, getToken, isAdmin, shows, favoriteMovies, navigate,  fetchFavoriteMovies}
+    const value = {axios, fetchIsAdmin, user, getToken, isAdmin, shows, favoriteMovies, navigate,  fetchFavoriteMovies, image_base_url}
 
     return (
         <AppContext.Provider value = {value} >

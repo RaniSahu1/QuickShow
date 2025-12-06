@@ -17,6 +17,7 @@ import ListShows from './pages/admin/ListShows'
 import { useAppContext } from './context/AppContext'
 import { SignIn } from '@clerk/clerk-react'
 
+
 const App = () => {
 const isAdminRoute = useLocation().pathname.startsWith('/admin')
 

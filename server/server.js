@@ -13,6 +13,7 @@ import showRouter from './routes/showRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
 import userRouter from './routes/userRoutes.js';
+import { stripeWebhooks } from './controllers/stripeWebhooks.js';
 console.log("Registered Inngest functions:", functions.map(fn => fn.config?.id ?? fn.id ?? fn.name));
 
 
@@ -20,6 +21,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 await connectDB();
+
+//stripe webhook route
+app.use('/api/stripe', express.raw({type : 'application/json'}), stripeWebhooks)
 
 //Middlewares
 

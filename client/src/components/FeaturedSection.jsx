@@ -3,10 +3,12 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import BlurCircle from './BlurCircle'
 import MovieCart from './MovieCart'
-import { dummyShowsData } from '../assets/assets'
+// import { dummyShowsData } from '../assets/assets'
+import { useAppContext } from '../context/AppContext'
 
 const FeaturedSection = () => {
     const navigate = useNavigate()
+    const {shows } = useAppContext()
   return (
     <div className='px-6 md:px-16 lg:px-24 xl:px-44 overflow-hidden'>
         <div className='relative flex items-center justify-between pt-20 pb-10'>
@@ -19,9 +21,13 @@ const FeaturedSection = () => {
         </div>
 
       <div className='flex flex-wrap max-sm:justify-center gap-8 mt-8'>
-        {dummyShowsData?.slice(0,4)?.map((show)=>(
-             <MovieCart key={show._id} movie={show} />
-        ))}
+        {(shows || [])
+    .filter(Boolean)        // remove null / undefined
+    .slice(0, 4)
+    .map((movie) => (
+      <MovieCart key={movie._id} movie={movie} />
+    ))}
+
       </div>
          
         <div className='flex justify-center mt-20'>

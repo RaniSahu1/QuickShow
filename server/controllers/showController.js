@@ -45,7 +45,10 @@ export const addShow = async (req, res) => {
                 poster_path: movieApiData.poster_path,
                 backdrop_path: movieApiData.backdrop_path,
                 genres : movieApiData.genres.map(genre => genre.name),
-                casts : movieCreditsData.cast.slice(0, 5).map(cast => cast.name),
+                casts : movieCreditsData.cast.slice(0, 5).map(cast => ({
+    name: cast.name,
+    profile_path: `https://image.tmdb.org/t/p/w200${cast.profile_path}`
+})),
                 release_date: movieApiData.release_date,
                 original_language: movieApiData.original_language,
                 tagline: movieApiData.tagline || "" ,
@@ -84,20 +87,35 @@ export const addShow = async (req, res) => {
 }
 
 // Api to get all shows for a database movie
+// Api to get all shows for a database movie
 export const getShows = async (req, res) => {
-    try {
-        
-        const shows = await Show.find().populate('movie').sort({ showDateTime: 1 } );
+  try {
+    const shows = await Show.find()
+      .populate('movie')
+      .sort({ showDateTime: 1 });
 
-        // filter unique movies from shows
-        const uniqueShows = new Set(shows.map(show => show.movie));
+    // Remove shows having null or missing movie ref
+    const movies = shows
+      .filter(show => show.movie) // avoid null crash
+      .map(show => show.movie);   // keep only movie obj
 
-        res.json({ success: true, shows : Array.from(uniqueShows) });
-    } catch (error) {
-        console.error("Error fetching shows:", error);
-        res.json({ success: false, message: "Error fetching shows" });
-    }       
-}
+    // Remove duplicate movies by _id
+    const uniqueMoviesMap = new Map();
+    movies.forEach(movie => {
+      uniqueMoviesMap.set(movie._id.toString(), movie);
+    });
+
+    res.json({
+      success: true,
+      shows: Array.from(uniqueMoviesMap.values())
+    });
+
+  } catch (error) {
+    console.error("Error fetching shows:", error);
+    res.json({ success: false, message: "Error fetching shows" });
+  }
+};
+
 
 // api to get single show from database
 export const getShow = async (req, res) => {

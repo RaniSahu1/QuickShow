@@ -28,10 +28,10 @@ export const addShow = async (req, res) => {
         if (!movie) {
             // Fetch movie details and credits from TMDB API
             const [movieDetailsResponse , movieCreditsResponse] = await Promise.all([
-                axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
-                    headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` }
-                }), axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits`, {
-                    headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` }
+                axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, {
+                    headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },timeout: 8000
+                }), axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`, {
+                    headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },timeout: 8000
                 })
             ])
 
@@ -81,8 +81,11 @@ export const addShow = async (req, res) => {
         res.json({success :true, message : "Show added successfully"});
 
 } catch (error) {
+    console.error("TMDB Error:", error?.response?.data || error.message);
+
         console.error("Error adding show:", error);
         res.json({success :false, message : "Error adding show"});
+
     }
 }
 

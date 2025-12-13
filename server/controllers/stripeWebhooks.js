@@ -1,44 +1,48 @@
-import Stripe from 'stripe';
-import Booking from '../models/Booking.js';
+import Stripe from "stripe";
+import Booking from "../models/Booking.js";
 
-export const stripeWebhooks = async ()=>{
- const stripeInstance = Stripe(process.env.STRIPE_SECRET_KEY);
- const sig = request.headers['stripe-signature'];
- let event;
+const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
 
- try {
-   event = stripeInstance.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
- } catch (err) {
-   console.log(`⚠️  Webhook signature verification failed.`, err.message);
-   return response.status(400).send(`Webhook Error: ${err.message}`);
- }
+export const stripeWebhooks = async (req, res) => {
+  const sig = req.headers["stripe-signature"];
 
- try {
-    switch (event.type) {
-      case 'payment_intent.succeeded': {
+  let event;
 
-        const paymentIntent = event.data.object;
-        const sessionList = await stripeInstance.checkout.sessions.list({
-          payment_intent: paymentIntent.id,
-         
+  try {
+    // IMPORTANT: Use req.body (raw buffer), NOT JSON
+    event = stripeInstance.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+
+  } catch (err) {
+    console.log("❌ Stripe Webhook Signature Verification Failed:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  try {
+    // Handle session completion (booking payment)
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+
+      const bookingId = session.metadata?.bookingId;
+
+      if (bookingId) {
+        await Booking.findByIdAndUpdate(bookingId, {
+          isPaid: true,
+          paymentLink: "",
         });
 
-        const session = sessionList.data[0];
-
-        const {bookingId} = session.metadata
-
-        await Booking.findByIdAndUpdate(bookingId, { isPaid: true, paymentLink : "" });
-        break;
+        console.log("✅ Payment successful, updated Booking:", bookingId);
       }
-      default:
-        console.log(`Unhandled event type ${event.type}`);
     }
 
-    res.json({ received: true });
-       
- } catch (error) {
-    console.log("Webhook processing error:" ,error);
-    response.status(500).send("Internal Server Error")
-    
- }
-}
+    return res.status(200).send("OK");
+
+
+  } catch (error) {
+    console.log("❌ Webhook Processing Error:", error.message);
+    return res.status(500).send("Internal Server Error");
+  }
+};

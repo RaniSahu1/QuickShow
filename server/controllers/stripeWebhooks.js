@@ -1,15 +1,17 @@
 import Stripe from "stripe";
 import Booking from "../models/Booking.js";
+import { inngest } from "../inngest/index.js";
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripeWebhooks = async (req, res) => {
+  console.log("🔥 Stripe webhook HIT");
   const sig = req.headers["stripe-signature"];
 
   let event;
 
   try {
-    // IMPORTANT: Use req.body (raw buffer), NOT JSON
+    
     event = stripeInstance.webhooks.constructEvent(
       req.body,
       sig,
@@ -28,11 +30,29 @@ export const stripeWebhooks = async (req, res) => {
 
       const bookingId = session.metadata?.bookingId;
 
+         if (!bookingId) {
+        return res.status(200).send("No bookingId");
+      }
+
+      const booking = await Booking.findById(bookingId);
+
+       // Prevent duplicate processing
+      if (!booking || booking.isPaid) {
+        return res.status(200).send("Already processed");
+      }
+
       if (bookingId) {
         await Booking.findByIdAndUpdate(bookingId, {
           isPaid: true,
-          paymentLink: "",
+         
         });
+
+       // send confirmation email
+
+       await inngest.send({
+        name:"app/show.booked",
+        data:{bookingId}
+       })
 
         console.log("✅ Payment successful, updated Booking:", bookingId);
       }

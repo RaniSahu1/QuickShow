@@ -2,6 +2,7 @@
 import Show from "../models/Show.js";
 import Booking from "../models/Booking.js";
 import Stripe from "stripe";
+import { inngest } from "../inngest/index.js";
 // function to check availability of seats for a particular show
 
 const checkSeatsAvailability = async (showId, selectedSeats) => {
@@ -93,8 +94,16 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 
         booking.paymentLink = session.url;
         await booking.save();
+        
+        // Run Inngest scheduler function to check payment status after 10 minutes
 
-
+        await inngest.send({
+            name : "app/checkpayment",
+            data : {
+                bookingId : booking._id.toString(),
+            }
+        })
+        
         res.json({ success: true, url: session.url });
     } catch (error) {
         console.error("Error creating booking:", error);

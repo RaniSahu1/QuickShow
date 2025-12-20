@@ -14,9 +14,12 @@ export const isAdmin = async (req, res) => {
 
 export const getDashboardData = async (req, res) => {
     try {
+        const startOfToday = new Date();
+startOfToday.setHours(0, 0, 0, 0);
+
         // Logic to fetch dashboard data
         const bookings = await Booking.find({isPaid :true})
-        const activeShows = await Show.find({showDateTime : {$gte : new Date()}}).populate('movie') ;
+        const activeShows = await Show.find({showDateTime : {$gte : startOfToday}}).populate('movie') ;
 
         const totalUser = await User.countDocuments();
 
@@ -37,7 +40,10 @@ export const getDashboardData = async (req, res) => {
 
 export const getAllShows = async (req, res) => {
     try {
-        const shows = await Show.find({showDateTime : {$gte : new Date()}}).populate('movie').sort({ showDateTime: 1 } );
+        const startOfToday = new Date();
+startOfToday.setHours(0, 0, 0, 0);
+
+        const shows = await Show.find({showDateTime : {$gte : startOfToday}}).populate('movie').sort({ showDateTime: 1 } );
         res.json({ success: true, shows });
     }
     catch (error) {

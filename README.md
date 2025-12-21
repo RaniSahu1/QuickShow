@@ -86,10 +86,21 @@ Fully deployed production app
 
 
 ## 📸 Screenshots
-
+### Home Page
 ![Home ](home.png)
+### Movies
 ![Movie ](movies.png)
-![Seat selection](
+### Seat Selection
+![Seat Selection](seat.png)
+### Payment
+![Payment](payment.png)
+### My Bookings
+![My Bookings](myBookings.png)
+### Admin Dashboard
+![Admin Dashboard 1](AdminDashboard1.png)
+![Admin Dashboard 2](AdminDashboard2.png)
+![Admin Dashboard 3](AdminDashboard3.png)
+![Admin Dashboard 4](AdminDashboard4.png)
 ## 🏗️ Status
 ✅ **Project completed**  
 Future improvements may include UI enhancements, QR-based tickets, and advanced analytics.

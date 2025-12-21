@@ -1,51 +1,97 @@
-🎬 Movie Ticket Booking Website (MERN)
+# 🎬 QuickShow – Movie Ticket Booking Platform (MERN Stack)
 
-🚧 Project under development – This is a full-stack movie ticket booking website built using the MERN stack.
+A full-stack **movie ticket booking web application** built using the **MERN stack**, featuring real-time seat booking, secure payments, background jobs, and admin management.
 
-📌 Features (Completed ✅)
+🔗 **Live Demo (Frontend):** https://quickshow-five-phi.vercel.app  
+🔗 **Backend API:** Deployed on Vercel  
+🔗 **Background Jobs:** Powered by Inngest
 
-User signup/login using Clerk Authentication (supports Email, Social, Phone number).
+## 📌 Features 
 
-Explore movies with details (title, genre, description).
+### 👤 User Features
+- 🔐 Authentication using **Clerk**
+  - Email, Google, and Phone login
+  - Multi-session login support
+- 🎥 Browse movies with details (cast, runtime, genre, rating)
+- ❤️ Add / remove movies from favorites
+- 📅 Select show date & time
+- 💺 Interactive seat selection
+- 💳 Secure payment using **Stripe**
+- 📧 Automatic emails:
+  - Booking confirmation
+  - Show reminders (8 hours before)
+- ⏳ Seats auto-released after **10 minutes** if payment is not completed
 
-Multi-session login (users can switch between multiple accounts without logging out).
+---
 
-Basic backend setup with MongoDB + Express + Node.js.
+### 🛠️ Admin Features
+- 📊 Admin dashboard
+  - Total bookings
+  - Total revenue
+  - Active shows
+  - Total users
+- ➕ Add new movies & shows
+- 📋 View all bookings
+- 📢 Auto email notifications to users when a new show is added
 
-🔧 Features (Planned 🚀)
+---
 
-Seat selection and booking system.
+## 🧠 Background Jobs (Inngest)
+- ⏰ Auto seat release after 10 minutes (payment timeout)
+- 📬 Booking confirmation emails
+- 🔔 Show reminder emails (cron-based)
+- 📢 New show notification emails
 
-Payment gateway integration.
-
-Email notifications using Inngest (new movie alerts, booking confirmations, reminders).
-
-Admin dashboard for managing movies and bookings.
-
-Auto seat reservation for 10 minutes if payment fails, after which seats are released.
-
-🛠️ Tech Stack
-
-Frontend: React, Tailwind CSS, Shadcn UI, Next.js (for planned deployment)
-
-Backend: Node.js, Express.js
-
-Database: MongoDB
-
-Authentication: Clerk
-
-Background Jobs: Inngest
-
-Deployment: Vercel / Netlify / AWS
+---
 
 
+## 🛠️ Tech Stack
 
-📸 Screenshots
+### Frontend
+- React
+- Tailwind CSS
+- Shadcn UI
+- Axios
+- React Router
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- Stripe
+- Nodemailer
+
+### Authentication
+- Clerk
+
+### Background Jobs
+- Inngest
+
+### Deployment
+- Frontend: Vercel  
+- Backend: Vercel  
+- Database: MongoDB Atlas
+
+## 🧪 Key Highlights
+
+Seat locking to prevent double booking
+
+Auto seat release using background jobs
+
+Timezone-safe date handling
+
+Stripe payment integration
+
+Fully deployed production app
+
+
+## 📸 Screenshots
 
 ![Home ](home.png)
 ![Movie ](movies.png)
+![Seat selection](
+## 🏗️ Status
+✅ **Project completed**  
+Future improvements may include UI enhancements, QR-based tickets, and advanced analytics.
 
-🏗️ Status
-
-This project is currently in progress.
-Future commits will include: seat booking, payment integration, and email notifications.
+---

@@ -7,6 +7,26 @@ import { useNavigate } from 'react-router-dom'
 const DAteSelect = ({dateTime, id}) => {
     const navigate = useNavigate()
     const [selected ,setSelected] = useState(null)
+
+    if (!dateTime || Object.keys(dateTime).length === 0) {
+  return (
+    <div id="dateSelect" className="pt-30">
+      <p className="text-gray-400">No shows available for booking</p>
+    </div>
+  );
+}
+ // ✅ START OF TODAY (for correct filtering)
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
+
+  // ✅ FILTER VALID DATES (today + future)
+  const validDates = Object.keys(dateTime).filter(date => {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  return d >= startOfToday
+})
+
+
     const onBookhandler = () =>{
         if(!selected ){
             return toast('Please select the date')
@@ -14,7 +34,11 @@ const DAteSelect = ({dateTime, id}) => {
  navigate(`/movies/${id}/${selected}` )
  scrollTo(0,0)
     }
+console.log(dateTime);
+
+    
   return (
+    
     <div id='dateSelect' className='pt-30'>
       <div className='flex flex-col md:flex-row items-center justify-between gap-10 relative p-8 bg-primary/10 border-primary/20 rounded-lg'>
       <BlurCircle top='-100px' left='-100px'/>
@@ -24,7 +48,7 @@ const DAteSelect = ({dateTime, id}) => {
         <div className='flex items-center gap-6 text-sm mt-5'>
             <ChevronLeftIcon width={28}/>
             <span className='grid grid-cols-3 md:flex flex-wrap md:max-w-lg gap-4'>
-                {Object.keys(dateTime).map((date)=>(
+                {validDates.map(date => (
                     <button 
                     onClick={() =>setSelected(date)}
                     key={date} className={`flex flex-col items-center justify-center h-14 w-14 aspect-square rounded cursor-pointer ${selected === date ? "bg-primary text-white " : "border border-primary/70"}`}>

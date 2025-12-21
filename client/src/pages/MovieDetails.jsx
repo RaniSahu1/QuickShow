@@ -49,6 +49,10 @@ const MovieDetails = () => {
     getshow()
   },[id, favoriteMovies])
 
+  const dateTime = show?.dateTime || {}
+
+
+
   return show ? (
     <div className='px-6 md:px-16 lg:px-40 pt-30 md:pt-50'>
       <div className='flex flex-col md:flex-row gap-8 max-w-6xl mx-auto'>
@@ -91,7 +95,8 @@ const MovieDetails = () => {
           ))}
         </div>
       </div>
-      <DAteSelect id={id} dateTime={show.dateTime} />
+      
+      <DAteSelect id={id} dateTime={dateTime} />
 
       <p className='text-lg font-medium mt-20 mb-8'>You May Also Like</p>
       <div className='flex flex-wrap max-sm:justify-center gap-8'>

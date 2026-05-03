@@ -3,6 +3,7 @@ import HeroSection from '../components/HeroSection'
 import FeaturedSection from '../components/FeaturedSection'
 import BlurCircle from '../components/BlurCircle'
 import TrailerSection from '../components/TrailerSection'
+import Chatbot from '../components/Chatbot'
 
 const Home = () => {
   return (
@@ -10,7 +11,7 @@ const Home = () => {
     <HeroSection/>
     <FeaturedSection/>
     <TrailerSection/>
-      
+    <Chatbot/>
     </>
   )
 }

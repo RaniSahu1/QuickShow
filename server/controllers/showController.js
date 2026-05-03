@@ -64,9 +64,9 @@ export const addShow = async (req, res) => {
         const showsToCreate = [];
         showsInput.forEach(show => {
             const showDate = show.date; // e.g., "2023-10-15"
-            show.time .forEach(time => {
+            show.time.forEach(time => {
                 // e.g., "18:30"
-                const dateTimeString = `${showDate}T${time}:00`; // "2023-10-15T18:30:00"
+                const dateTimeString = `${showDate}T${time}:00+05:30`; // "2023-10-15T18:30:00"
                 showsToCreate.push({
                     movie : movieId,
                     showDateTime : new Date(dateTimeString),
